@@ -1,126 +1,61 @@
 package TestCases;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.Test;
+import pages.HomePage;
+import pages.LoginPage;
 
-import static org.testng.Assert.assertEquals;
 
 /**
  * Created by oleg on 19.05.17.
  */
 public class AuthTests extends BaseUITest {
 
-    String adminURL = "https://demostore.x-cart.com/admin/admin.php?target=login";
-    String adminLogin = "bit-bucket@x-cart.com";
-    String adminPassword = "master";
-    String newUserEmail = "testemail@gmail.com";
-    String newUserPass = "Test123";
-    WebDriverWait wait;
+    private static final String DEMOSTORE_URL = "https://demostore.x-cart.com/admin/admin.php";
+    private static final String DEMOSTOREX_URL = "https://demostore.x-cart.com";
 
     @Test
-    public void UserShouldBeLoginToAdmin() {
-        driver.get(adminURL);
-        driver.manage().window().maximize();
+    public void UserShouldBeLoginToAdminWithButtonClick() {
+        String currentPageUrl = new LoginPage(driver)
+                .openXCartSite()
+                .enterLoginInfo("bit-bucket@x-cart.com", "master")
+                .clickSubmitButton()
+                .getPageUrl();
 
-        WebElement login = driver.findElement(By.name("login"));
-        login.clear();
-        login.sendKeys(adminLogin);
-
-        WebElement password = driver.findElement(By.name("password"));
-        password.clear();
-        password.sendKeys(adminPassword);
-
-        password.submit();
+        Assert.assertEquals(currentPageUrl, DEMOSTORE_URL, "Current URL is different from expected");
     }
 
     @Test
-    public void UserShouldBeLoginToAdminByClickOnButton() {
-        driver.get(adminURL);
-        driver.manage().window().maximize();
+    public void UserShouldBeLoginToAdminWithSubmitForm(){
+        String currentPageUrl = new LoginPage(driver)
+                .openXCartSite()
+                .enterLoginInfo("bit-bucket@x-cart.com", "master")
+                .submitForm()
+                .getPageUrl();
 
-        WebElement login = driver.findElement(By.name("login"));
-        login.clear();
-        login.sendKeys(adminLogin);
-
-        WebElement password = driver.findElement(By.name("password"));
-        password.clear();
-        password.sendKeys(adminPassword);
-
-        driver.findElement(By.xpath("//button[contains(@class,'submit')]"));
+        Assert.assertEquals(currentPageUrl, DEMOSTORE_URL, "Current URL is different from expected");
     }
 
     @Test
-    public void UserShouldBeLoginToAdminByTapOnEnterKey() {
-        driver.get(adminURL);
-        driver.manage().window().maximize();
+    public void UserShouldBeLoginToAdminWithEnterKey(){
+        String currentPageUrl = new LoginPage(driver)
+                .openXCartSite()
+                .enterLoginInfo("bit-bucket@x-cart.com", "master")
+                .clickEnterKey()
+                .getPageUrl();
 
-        WebElement login = driver.findElement(By.name("login"));
-        login.clear();
-        login.sendKeys(adminLogin);
-
-        WebElement password = driver.findElement(By.name("password"));
-        password.clear();
-        password.sendKeys(adminPassword);
-
-        password.sendKeys(Keys.ENTER);
-
+        Assert.assertEquals(currentPageUrl, DEMOSTORE_URL, "Current URL is different from expected");
     }
 
-    @Test(priority = 1)
-    public void CreateUser() {
-        driver.get(adminURL);
-        driver.manage().window().maximize();
-        WebElement login = driver.findElement(By.name("login"));
-        login.clear();
-        login.sendKeys(adminLogin);
+    @Test
+    public void UserShouldBeSignedUp(){
+        String currentPageUrl = new HomePage(driver)
+                .openHomePage()
+                .openSignUpForm()
+                .enterRegistrationInfo("roagold+2@gmail.com","Test123","Test123")
+                .submitRegistration()
+                .getPageUrl();
 
-        WebElement password = driver.findElement(By.name("password"));
-        password.clear();
-        password.sendKeys(adminPassword);
-
-        password.submit();
-
-        wait = new WebDriverWait(driver, 10);
-
-        WebElement closePopupBtn = wait.until(ExpectedConditions.elementToBeClickable(By.className("ui-dialog-titlebar-close")));
-
-        closePopupBtn.click();
-
-        WebElement addNewBtn = driver.findElement(By.xpath(".//*[@id='leftMenu']/ul[1]/li[3]/div[1]/span"));
-        addNewBtn.click();
-        WebElement addNewUserBtn = driver.findElement(By.xpath(".//*[@id='leftMenu']/ul[1]/li[3]/div[2]/ul/li[3]/div/a"));
-        addNewUserBtn.click();
-
-        WebElement emailField = driver.findElement(By.xpath(".//*[@id='login']"));
-        emailField.sendKeys(newUserEmail);
-        WebElement passwordField = driver.findElement(By.xpath(".//*[@id='password']"));
-        passwordField.sendKeys(newUserPass);
-        WebElement confirmPassword = driver.findElement(By.xpath(".//*[@id='password-conf']"));
-        confirmPassword.sendKeys(newUserPass);
-
-        confirmPassword.submit();
-
+        Assert.assertEquals(currentPageUrl, DEMOSTOREX_URL, "Current URL is different from expected");
     }
-
-
-    @Test(priority = 2)
-    public void Login(){
-        driver.get(adminURL);
-        driver.manage().window().maximize();
-
-        WebElement login = driver.findElement(By.name("login"));
-        login.clear();
-        login.sendKeys(newUserEmail);
-
-        WebElement password = driver.findElement(By.name("password"));
-        password.clear();
-        password.sendKeys(newUserPass);
-
-        driver.findElement(By.xpath("//button[contains(@class,'submit')]"));
-    }
-
 }
