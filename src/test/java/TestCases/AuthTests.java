@@ -1,9 +1,16 @@
 package TestCases;
 
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+import pages.AdminPage;
+import pages.BasePage;
 import pages.HomePage;
 import pages.LoginPage;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 
 /**
@@ -12,7 +19,13 @@ import pages.LoginPage;
 public class AuthTests extends BaseUITest {
 
     private static final String DEMOSTORE_URL = "https://demostore.x-cart.com/admin/admin.php";
-    private static final String DEMOSTOREX_URL = "https://demostore.x-cart.com";
+
+    String adminLogin = "bit-bucket@x-cart.com";
+    String adminPassword = "master";
+    String username = "roagold";
+    String email = "@gmail.com";
+    String password = "Test123";
+
 
     @Test
     public void UserShouldBeLoginToAdminWithButtonClick() {
@@ -22,7 +35,7 @@ public class AuthTests extends BaseUITest {
                 .clickSubmitButton()
                 .getPageUrl();
 
-        Assert.assertEquals(currentPageUrl, DEMOSTORE_URL, "Current URL is different from expected");
+        assertEquals(currentPageUrl, DEMOSTORE_URL, "Current URL is different from expected");
     }
 
     @Test
@@ -33,7 +46,7 @@ public class AuthTests extends BaseUITest {
                 .submitForm()
                 .getPageUrl();
 
-        Assert.assertEquals(currentPageUrl, DEMOSTORE_URL, "Current URL is different from expected");
+        assertEquals(currentPageUrl, DEMOSTORE_URL, "Current URL is different from expected");
     }
 
     @Test
@@ -44,18 +57,19 @@ public class AuthTests extends BaseUITest {
                 .clickEnterKey()
                 .getPageUrl();
 
-        Assert.assertEquals(currentPageUrl, DEMOSTORE_URL, "Current URL is different from expected");
+        assertEquals(currentPageUrl, DEMOSTORE_URL, "Current URL is different from expected");
     }
 
     @Test
-    public void UserShouldBeSignedUp(){
-        String currentPageUrl = new HomePage(driver)
-                .openHomePage()
-                .openSignUpForm()
-                .enterRegistrationInfo("roagold+2@gmail.com","Test123","Test123")
-                .submitRegistration()
-                .getPageUrl();
-
-        Assert.assertEquals(currentPageUrl, DEMOSTOREX_URL, "Current URL is different from expected");
+    public void UserShouldBeRegistered(){
+        WebElement adminPage = new LoginPage(driver)
+                .openXCartSite()
+                .enterLoginInfo(adminLogin, adminPassword)
+                .submitForm()
+                .createNewUser(username, email, password)
+                .waitForElementPresent(AdminPage.getLocator());
+        assertTrue(adminPage.isDisplayed());
+        assertEquals(adminPage.getText(), "Warning: You are not allowed to do this in demo mode.");
     }
+
 }

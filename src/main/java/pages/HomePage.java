@@ -10,64 +10,47 @@ import org.openqa.selenium.support.PageFactory;
  */
 public class HomePage extends BasePage {
 
+    private static final String baseURL = "https://demostore.x-cart.com/";
+
+    @FindBy(css = "[class*=header_bar-sign_in]")
+    private WebElement signInButton;
+
+    @FindBy(css="[id*=login-email]")
+    private WebElement email;
+
+    @FindBy(css="[id*=login-password]")
+    private WebElement pass;
+
     public HomePage(WebDriver driver) {
         super(driver);
     }
 
-    @FindBy(css = ".input [name='login']")
-    private WebElement emailField;
-
-    @FindBy(css = ".input [name='password']")
-    private WebElement passwordField;
-
-    @FindBy(css = ".input [name='login']")
-    private WebElement passwordConfirmationField;
-
-    public String getPageUrl(){
-        return driver.getCurrentUrl();
-    }
-
-    protected void clearAndTypeToElement(String text, WebElement webElement) {
-        webElement.clear();
-        webElement.sendKeys(text);
-    }
-
-    public HomePage openHomePage(){
-        driver.get("https://demostore.x-cart.com/");
-        driver.manage().window().maximize();
+    public HomePage openHomePage() {
+        driver.get(baseURL);
         return this;
     }
 
-//    public HomePage openSignUpForm(){
-//        WebElement signInButton = driver.findElement(By.cssSelector(".header_bar-sign_in [type='button']"));
-//        signInButton.click();
-//        return this;
-//    }
-
-    public HomePage enterRegistrationInfo(String email, String password, String passwordConfirmation){
-        enterEmail(email);
-        enterPassword(password);
-        enterPasswordConfirmation(passwordConfirmation);
+    public HomePage openSignInForm(){
+        waitForElementClickable(signInButton).click();
         return this;
     }
 
-    public HomePage submitRegistration(){
-        passwordConfirmationField.submit();
-        return PageFactory.initElements(driver, HomePage.class);
+    public void inputLoginData(String userLogin) {
+        WebElement emailField = waitForElementClickable(email);
+        clearAndTypeToElement(userLogin, email);
     }
 
-    public void enterEmail(String emailAddress) {
-        emailField.sendKeys(emailAddress);
+    public void inputPasswordData(String userPassword) {
+        WebElement passwordField = waitForElementClickable(pass);
+        clearAndTypeToElement(userPassword, pass);
     }
 
-    public void enterPassword(String password) {
-        passwordField.sendKeys(password);
+    public HomePage loginAsUser(String login, String password){
+        inputLoginData(login);
+        inputPasswordData(password);
+        pass.submit();
+        return this;
     }
-
-    public void enterPasswordConfirmation(String passwordConfirmation) {
-        passwordConfirmationField.sendKeys(passwordConfirmation);
-    }
-
 
 
 }
