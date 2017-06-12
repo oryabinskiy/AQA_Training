@@ -12,13 +12,13 @@ public class HomePage extends BasePage {
 
     private static final String baseURL = "https://demostore.x-cart.com/";
 
-    @FindBy(css = "[class*=header_bar-sign_in]")
+    @FindBy(className = "header_bar-sign_in")
     private WebElement signInButton;
 
-    @FindBy(css="[id*=login-email]")
+    @FindBy(id = "login-email")
     private WebElement email;
 
-    @FindBy(css="[id*=login-password]")
+    @FindBy(id ="login-password")
     private WebElement pass;
 
     public HomePage(WebDriver driver) {
