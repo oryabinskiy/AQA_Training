@@ -1,5 +1,6 @@
 package pages;
 
+import Utils.LogUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -23,6 +24,7 @@ public class LoginPage extends BasePage {
     }
 
     public LoginPage openXCartSite() {
+        LogUtils.testStep("Open site");
         driver.get("https://demostore.x-cart.com/admin/admin.php?target=login");
         return this;
     }

@@ -1,12 +1,9 @@
 package TestCases;
 
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.AdminPage;
-import pages.BasePage;
-import pages.HomePage;
+import Utils.LogUtils;
 import pages.LoginPage;
 
 import static org.testng.Assert.assertEquals;
@@ -29,6 +26,7 @@ public class AuthTests extends BaseUITest {
 
     @Test
     public void UserShouldBeLoginToAdminWithButtonClick() {
+        LogUtils.testStep("Login to admin page");
         String currentPageUrl = new LoginPage(driver)
                 .openXCartSite()
                 .enterLoginInfo("bit-bucket@x-cart.com", "master")

@@ -12,18 +12,17 @@ import java.util.Date;
  */
 public class AdminPage extends BasePage {
 
+    private WebElement login;
+    private WebElement password;
+
+    @FindBy(id = "password-conf")
+    private WebElement passwordConf;
     @FindBy(xpath = ".//*[@id='header']/div[2]/div[5]/div[1]")
     private WebElement QuickMenu;
     @FindBy(xpath = ".//*[@id='header']/div[2]/div[5]/div[2]/div/ul/li[3]/div/a")
     private WebElement addNewUserItem;
-    @FindBy(css = "[id*=login]")
-    private WebElement email;
-    @FindBy(css = "[id*=password]")
-    private WebElement password;
-    @FindBy(css = "[id*=password-conf]")
-    private WebElement passwordConf;
     static String locator = ".//*[@id='status-messages']/ul/li";
-    @FindBy(css = "[class*=ui-dialog-titlebar-close]")
+    @FindBy(className = "ui-dialog-titlebar-close")
     private WebElement widgetCloseButton;
 
     public AdminPage(WebDriver driver) {
@@ -39,7 +38,7 @@ public class AdminPage extends BasePage {
         clickOnElement(QuickMenu);
         clickOnElement(addNewUserItem);
 
-        WebElement newUserLogin = waitForElementClickable(email);
+        WebElement newUserLogin = waitForElementClickable(login);
         clearAndTypeToElement(username+getCurrentDate()+mail, newUserLogin);
         clearAndTypeToElement(userPassword,password);
         clearAndTypeToElement(userPassword,passwordConf);
